@@ -17,5 +17,10 @@ https://getslash.co/
   
 ## ToDo
 
-  - Skapa wireframe
-  - Lära mig skapa en todo-app med subtasks
+- Skapa wireframe
+- Lära mig skapa en todo-app med subtasks
+- Fundera ut vad jag vill se överst. Gör nu eller nästa aktivitet
+- Se till att vanor prioriteras högst
+  - Se till så jag alltid slutför dagens vanor
+    - ma
+    
