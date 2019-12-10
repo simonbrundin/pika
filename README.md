@@ -5,6 +5,7 @@
 3. They do nothing to keep you focused on the current task
 
 The result is tasks continually rolling over to the next day, a cycle of inefficiency.
+https://getslash.co/
 
 ## Features
   
@@ -12,3 +13,9 @@ The result is tasks continually rolling over to the next day, a cycle of ineffic
   - Automatic Link Opening - Automatically open up any web links in the task notes when you start the task.
   - Drag & Drop Reorder - Ändra ordningen på målen genom att bara dra dem
   - WASD Reorder - Ändra ordningen på målen genom att klicka på WASD-tangenterna
+  - Fokusruta - Your current task stays pinned on screen so you know where to focus, at all times.
+  
+## ToDo
+
+  - Skapa wireframe
+  - Lära mig skapa en todo-app med subtasks
