@@ -1,5 +1,3 @@
-# pika
-
 ## Why? Todo lists are broken.
 
 1. Manually choosing your next task causes friction and wastes precious decision-making energy
