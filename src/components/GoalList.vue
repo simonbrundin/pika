@@ -1,40 +1,21 @@
 <template>
   <div id="goal-list">
-    <input
-      v-if="showInputBox"
-      type="text"
-      class="goal-input"
-      @keyup.enter="addGoal"
-      @focus="inputInFocus = true"
-      @blur="inputInFocus = false"
-      v-model="goalInputText"
-      placeholder="Målnamn"
-    />
     <p>
       <strong>
-        <u>Emma</u>
+        <u>Min lista</u>
       </strong>
     </p>
     <ul v-for="(goal, index) in goals" :key="index">
       <li
         :class="{
+          prio: goal.prio,
           done: goal.completed,
           'selected-goal': index === selectedGoal
         }"
         @click="checkGoal(goal, index)"
-        @dblclick="editGoal(goal)"
         v-if="!goal.editing"
-      >
-        {{ goal.title }}
-        <input
-          v-if="goal.editing"
-          class="goal-line-edit"
-          v-focus
-          type="text"
-          v-model="goal.title"
-          @keyup.enter="inputInFocus = false"
-        />
-      </li>
+      >{{ goal.title }}</li>
+      <input v-focus v-if="goal.editing" class="goal-line-edit" type="text" v-model="goal.title" />
     </ul>
   </div>
 </template>
@@ -45,9 +26,10 @@ export default {
 
   data() {
     return {
+      editingGoal: false,
       inputInFocus: false,
       goalInputText: '',
-      showInputBox: false,
+
       selectedGoal: 0,
       goals: [
         {
@@ -55,14 +37,14 @@ export default {
           title: 'Pussa på Emma',
           completed: false,
           editing: false,
-          prio: true
+          prio: false
         },
         {
           id: 2,
           title: 'Krama Emma',
           completed: false,
           editing: false,
-          prio: true
+          prio: false
         },
         {
           id: 3,
@@ -83,76 +65,112 @@ export default {
     }
   },
   mounted() {
-    document.addEventListener('keydown', this.evaluateKeystroke)
+    document.addEventListener('keydown', this.keyboardShortcuts)
   },
 
   methods: {
-    evaluateKeystroke() {
-      if (this.inputInFocus) {
-        console.log(event.keyCode)
+    keyboardShortcuts(event) {
+      // 1 - Om ett målnamn håller på att redigeras
+
+      if (this.editingGoal) {
+        // 1.1 - Avsluta redigering med Enter eller Caps Lock
+        if (event.keyCode === 13 || event.keyCode === 27) {
+          console.log('avslutat redigering')
+          // Om inget fylls i -> ta bort målet
+          if (this.goals[this.selectedGoal].title === '') {
+            this.goals.splice(this.selectedGoal, 1)
+            this.selectedGoal--
+          }
+          this.goals[this.selectedGoal].editing = false
+
+          this.editingGoal = false
+        }
       } else {
-        this.navigateGoals()
-      }
-    },
-    navigateGoals() {
-      const plats = this.selectedGoal - 1
-      switch (event.keyCode) {
-        case 73: // I - Navigera upp
-          if (this.selectedGoal > 0) {
-            this.selectedGoal--
-          }
-          break
-        case 75: // K - Navigera ner
-          if (this.selectedGoal < this.goals.length - 1) {
+        const plats = this.selectedGoal - 1
+        switch (event.keyCode) {
+          // 2 - Navigera mellan målen
+          case 73: // I - Navigera upp
+            if (this.selectedGoal > 0) {
+              this.selectedGoal--
+            }
+
+            break
+          case 75: // K - Navigera ner
+            if (this.selectedGoal < this.goals.length - 1) {
+              this.selectedGoal++
+            }
+
+            break
+          // Flytta mål
+          case 69: // E - Flytta upp
+            if (this.editingGoal) {
+              console.log('gör inget')
+            } else {
+              if (this.selectedGoal > 0) {
+                this.goals.splice(
+                  plats,
+                  2,
+                  this.goals[this.selectedGoal],
+                  this.goals[this.selectedGoal - 1]
+                )
+                this.selectedGoal--
+              }
+            }
+            break
+          case 68: // D - Flytta ner
+            if (this.editingGoal) {
+              console.log('gör inget')
+            } else {
+              if (this.selectedGoal < this.goals.length - 1) {
+                this.goals.splice(
+                  this.selectedGoal,
+                  2,
+                  this.goals[this.selectedGoal + 1],
+                  this.goals[this.selectedGoal]
+                )
+                this.selectedGoal++
+              }
+            }
+
+            break
+          // 3 - Skapa nytt mål
+          case 13: // Enter
+            console.log('enter')
+            this.editingGoal = true
+            this.goals.splice(this.selectedGoal + 1, 0, {
+              id: this.goals.length + 1,
+              title: '',
+              completed: false,
+              editing: true,
+              prio: false
+            })
             this.selectedGoal++
-          }
-          break
-        case 9: // Tab
-          this.goals[this.selectedGoal - 1].editing = true
 
-          break
-        case 32: // Space
-          this.goals.splice(this.selectedGoal, 1)
+            break
+          // 4 Redigera text på valt mål
+          case 27: // Caps Lock
+            this.goals[this.selectedGoal].editing = true
 
-          break
-        case 69: // E - Flytta upp
-          if (this.selectedGoal > 0) {
-            this.goals.splice(
-              plats,
-              2,
-              this.goals[this.selectedGoal],
-              this.goals[this.selectedGoal - 1]
-            )
+            this.editingGoal = true
+
+            break
+          // 5 Ta bort mål
+          case 32: // Space
+            this.goals.splice(this.selectedGoal, 1)
             this.selectedGoal--
-          }
 
-          break
-        case 68: // D - Flytta ner
-          if (this.selectedGoal < this.goals.length - 1) {
-            this.goals.splice(
-              this.selectedGoal,
-              2,
-              this.goals[this.selectedGoal + 1],
-              this.goals[this.selectedGoal]
-            )
-            this.selectedGoal++
-          }
+            break
+          // Prioritera mål
+          case 186: // Ö
+            this.goals[this.selectedGoal].prio = !this.goals[this.selectedGoal]
+              .prio
 
-          break
-        case 78: // N
-          console.log('ny')
-          if (this.showInputBox) {
-            this.showInputBox = false
-          } else {
-            this.showInputBox = true
-          }
-          this.showInputBox
+            break
 
-          break
-
-        default:
-          console.log(event.keyCode)
-          break
+          default:
+            console.log(event.keyCode)
+            break
+        }
       }
     },
     addGoal() {
@@ -177,14 +195,11 @@ export default {
       this.selectedGoal = goal.id
     },
     checkGoal(goal, index) {
-      if (goal.completed) {
-        goal.completed = false
-      } else {
-        goal.completed = true
-      }
       this.selectedGoal = index
     },
     editGoal(goal) {
+      console.log('test')
+
       goal.editing = true
     },
     doneEditingGoal(goal) {
@@ -239,5 +254,8 @@ h1 {
 
 ul {
   list-style-type: none;
+}
+.prio {
+  color: red;
 }
 </style>
