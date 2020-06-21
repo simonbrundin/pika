@@ -10,6 +10,11 @@
       v-model="goalInputText"
       placeholder="Målnamn"
     />
+    <p>
+      <strong>
+        <u>Emma</u>
+      </strong>
+    </p>
     <ul v-for="(goal, index) in goals" :key="index">
       <li
         :class="{
@@ -107,11 +112,7 @@ export default {
 
           break
         case 32: // Space
-          if (this.goals[this.selectedGoal].completed) {
-            this.goals[this.selectedGoal].completed = false
-          } else {
-            this.goals[this.selectedGoal].completed = true
-          }
+          this.goals.splice(this.selectedGoal, 1)
 
           break
         case 69: // E - Flytta upp
