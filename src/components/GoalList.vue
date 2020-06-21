@@ -1,32 +1,37 @@
 <template>
   <div id="goal-list">
     <input
+      v-if="showInputBox"
       type="text"
       class="goal-input"
       @keyup.enter="addGoal"
+      @keydown="navigateGoals"
+      @focus="inputInFocus = true"
+      @blur="inputInFocus = false"
       v-model="goalInputText"
       placeholder="Skriv nytt mål"
     />
-    <div v-for="goal in goals" :key="goal.id">
-      <div
+    <ul v-for="(goal, index) in goals" :key="index">
+      <li
         :class="{
           done: goal.completed,
-          'selected-goal': goal.id === selectedGoal
+          'selected-goal': index === selectedGoal
         }"
-        @click="checkGoal(goal)"
+        @click="checkGoal(goal, index)"
         @dblclick="editGoal(goal)"
         v-if="!goal.editing"
-      >{{ goal.title }}</div>
-
-      <input
-        v-if="goal.editing"
-        class="goal-line-edit"
-        v-focus
-        type="text"
-        v-model="goal.title"
-        @keyup.enter="doneEditingGoal(goal)"
-      />
-    </div>
+      >
+        {{ goal.title }}
+        <input
+          v-if="goal.editing"
+          class="goal-line-edit"
+          v-focus
+          type="text"
+          v-model="goal.title"
+          @keyup.enter="doneEditingGoal(goal)"
+        />
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -36,20 +41,31 @@ export default {
 
   data() {
     return {
+      inputInFocus: false,
       goalInputText: '',
+      showInputBox: false,
       selectedGoal: 0,
       goals: [
         {
           id: 1,
           title: 'Pussa på Emma',
           completed: false,
-          editing: false
+          editing: false,
+          prio: true
         },
         {
           id: 2,
           title: 'Krama Emma',
           completed: false,
-          editing: false
+          editing: false,
+          prio: true
+        },
+        {
+          id: 3,
+          title: 'Okej Emma',
+          completed: false,
+          editing: false,
+          prio: false
         }
       ]
     }
@@ -63,11 +79,19 @@ export default {
     }
   },
   mounted() {
-    document.addEventListener('keydown', this.navigateGoals)
+    document.addEventListener('keydown', this.evaluateKeystroke)
   },
 
   methods: {
+    evaluateKeystroke() {
+      if (this.inputInFocus) {
+        console.log(event.keyCode)
+      } else {
+        this.navigateGoals()
+      }
+    },
     navigateGoals() {
+      const plats = this.selectedGoal - 1
       switch (event.keyCode) {
         case 38: // Upp
           if (this.selectedGoal > 0) {
@@ -84,11 +108,49 @@ export default {
 
           break
         case 32: // Space
-          if (this.goals[this.selectedGoal - 1].completed) {
-            this.goals[this.selectedGoal - 1].completed = false
+          if (this.goals[this.selectedGoal].completed) {
+            this.goals[this.selectedGoal].completed = false
           } else {
-            this.goals[this.selectedGoal - 1].completed = true
+            this.goals[this.selectedGoal].completed = true
           }
+
+          break
+        case 69: // E
+          if (this.selectedGoal > 0) {
+            this.goals.splice(
+              plats,
+              2,
+              this.goals[this.selectedGoal],
+              this.goals[this.selectedGoal - 1]
+            )
+            this.selectedGoal--
+          } else {
+            console.log('e')
+          }
+
+          break
+        case 68: // D
+          if (this.selectedGoal < this.goals.length) {
+            this.goals.splice(
+              this.selectedGoal,
+              2,
+              this.goals[this.selectedGoal + 1],
+              this.goals[this.selectedGoal]
+            )
+            this.selectedGoal++
+          } else {
+            console.log('d')
+          }
+
+          break
+        case 78: // N
+          console.log('ny')
+          if (this.showInputBox) {
+            this.showInputBox = false
+          } else {
+            this.showInputBox = true
+          }
+          this.showInputBox
 
           break
 
@@ -112,12 +174,13 @@ export default {
         alert('Fyll i ruta')
       }
     },
-    checkGoal(goal) {
+    checkGoal(goal, index) {
       if (goal.completed) {
         goal.completed = false
       } else {
         goal.completed = true
       }
+      this.selectedGoal = index
     },
     editGoal(goal) {
       goal.editing = true
@@ -131,7 +194,7 @@ export default {
 
 <style>
 #goal-list {
-  width: 800px;
+  /* width: 800px; */
   text-align: center;
   margin: 100px auto;
   font-size: 30px;
