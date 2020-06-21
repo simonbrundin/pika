@@ -5,7 +5,6 @@
       type="text"
       class="goal-input"
       @keyup.enter="addGoal"
-      @keydown="navigateGoals"
       @focus="inputInFocus = true"
       @blur="inputInFocus = false"
       v-model="goalInputText"
@@ -28,7 +27,7 @@
           v-focus
           type="text"
           v-model="goal.title"
-          @keyup.enter="doneEditingGoal(goal)"
+          @keyup.enter="inputInFocus = false"
         />
       </li>
     </ul>
@@ -93,12 +92,12 @@ export default {
     navigateGoals() {
       const plats = this.selectedGoal - 1
       switch (event.keyCode) {
-        case 38: // Upp
+        case 73: // I - Navigera upp
           if (this.selectedGoal > 0) {
             this.selectedGoal--
           }
           break
-        case 40: // Ner
+        case 75: // K - Navigera ner
           if (this.selectedGoal < this.goals.length) {
             this.selectedGoal++
           }
@@ -115,7 +114,7 @@ export default {
           }
 
           break
-        case 69: // E
+        case 69: // E - Flytta upp
           if (this.selectedGoal > 0) {
             this.goals.splice(
               plats,
@@ -124,13 +123,11 @@ export default {
               this.goals[this.selectedGoal - 1]
             )
             this.selectedGoal--
-          } else {
-            console.log('e')
           }
 
           break
-        case 68: // D
-          if (this.selectedGoal < this.goals.length) {
+        case 68: // D - Flytta ner
+          if (this.selectedGoal < this.goals.length - 1) {
             this.goals.splice(
               this.selectedGoal,
               2,
@@ -138,8 +135,6 @@ export default {
               this.goals[this.selectedGoal]
             )
             this.selectedGoal++
-          } else {
-            console.log('d')
           }
 
           break
@@ -174,11 +169,12 @@ export default {
         })
         this.goalInputText = ''
       } else {
-        alert('Fyll i ruta')
+        this.showInputBox = false
       }
     },
     selectGoal(goal) {
       this.selectedGoal = goal.id
+    },
     checkGoal(goal, index) {
       if (goal.completed) {
         goal.completed = false
