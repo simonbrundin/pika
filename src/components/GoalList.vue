@@ -13,10 +13,12 @@
           done: goal.completed,
           'selected-goal': goal.id === selectedGoal
         }"
-        @click="checkGoal(goal)"
+        @click="selectGoal(goal)"
         @dblclick="editGoal(goal)"
         v-if="!goal.editing"
-      >{{ goal.title }}</div>
+      >
+        {{ goal.title }}
+      </div>
 
       <input
         v-if="goal.editing"
@@ -43,13 +45,10 @@ export default {
           id: 1,
           title: 'Pussa på Emma',
           completed: false,
-          editing: false
-        },
-        {
-          id: 2,
-          title: 'Krama Emma',
-          completed: false,
-          editing: false
+          editing: false,
+          planned: false,
+          startTime: '13.00 14/12/2019',
+          priority: 3
         }
       ]
     }
@@ -105,19 +104,18 @@ export default {
           id: newID,
           title: this.goalInputText,
           completed: false,
-          editing: false
+          editing: false,
+          planned: false,
+          startTime: '13.00 14/12/2019',
+          priority: 0
         })
         this.goalInputText = ''
       } else {
         alert('Fyll i ruta')
       }
     },
-    checkGoal(goal) {
-      if (goal.completed) {
-        goal.completed = false
-      } else {
-        goal.completed = true
-      }
+    selectGoal(goal) {
+      this.selectedGoal = goal.id
     },
     editGoal(goal) {
       goal.editing = true
