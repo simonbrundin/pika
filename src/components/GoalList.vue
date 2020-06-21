@@ -8,7 +8,7 @@
       @focus="inputInFocus = true"
       @blur="inputInFocus = false"
       v-model="goalInputText"
-      placeholder="Skriv nytt mål"
+      placeholder="Målnamn"
     />
     <ul v-for="(goal, index) in goals" :key="index">
       <li
