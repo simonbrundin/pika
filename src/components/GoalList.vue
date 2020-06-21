@@ -61,7 +61,7 @@ export default {
         },
         {
           id: 3,
-          title: 'Okej Emma',
+          title: 'Mata Emma',
           completed: false,
           editing: false,
           prio: false
@@ -98,7 +98,7 @@ export default {
           }
           break
         case 75: // K - Navigera ner
-          if (this.selectedGoal < this.goals.length) {
+          if (this.selectedGoal < this.goals.length - 1) {
             this.selectedGoal++
           }
           break
