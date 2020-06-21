@@ -5,24 +5,42 @@
         <u>Min lista</u>
       </strong>
     </p>
-    <ul v-for="(goal, index) in goals" :key="index">
-      <li
-        :class="{
-          prio: goal.prio,
-          done: goal.completed,
-          'selected-goal': index === selectedGoal
-        }"
-        @click="checkGoal(goal, index)"
-        v-if="!goal.editing"
-      >{{ goal.title }}</li>
-      <input v-focus v-if="goal.editing" class="goal-line-edit" type="text" v-model="goal.title" />
-    </ul>
+    <draggable
+      v-model="goals"
+      group="people"
+      @start="drag = true"
+      @end="drag = false"
+    >
+      <ul v-for="(goal, index) in goals" :key="index">
+        <li
+          :class="{
+            prio: goal.prio,
+            done: goal.completed,
+            'selected-goal': index === selectedGoal
+          }"
+          @click="checkGoal(goal, index)"
+          v-if="!goal.editing"
+        >
+          {{ goal.title }}
+        </li>
+        <input
+          v-focus
+          v-if="goal.editing"
+          class="goal-line-edit"
+          type="text"
+          v-model="goal.title"
+        /></ul
+    ></draggable>
   </div>
 </template>
 
 <script>
+import draggable from 'vuedraggable'
 export default {
   name: 'goal-list',
+  components: {
+    draggable
+  },
 
   data() {
     return {
