@@ -8,8 +8,9 @@
     <draggable
       v-model="goals"
       group="people"
-      @start="drag = true"
-      @end="drag = false"
+      @start="zeroSelection"
+      @end="finishSelection"
+      :move="changeSelection"
     >
       <ul v-for="(goal, index) in goals" :key="index">
         <li
@@ -20,17 +21,10 @@
           }"
           @click="checkGoal(goal, index)"
           v-if="!goal.editing"
-        >
-          {{ goal.title }}
-        </li>
-        <input
-          v-focus
-          v-if="goal.editing"
-          class="goal-line-edit"
-          type="text"
-          v-model="goal.title"
-        /></ul
-    ></draggable>
+        >{{ goal.title }}</li>
+        <input v-focus v-if="goal.editing" class="goal-line-edit" type="text" v-model="goal.title" />
+      </ul>
+    </draggable>
   </div>
 </template>
 
@@ -87,6 +81,18 @@ export default {
   },
 
   methods: {
+    zeroSelection: function() {
+      this.selectedGoal = this.goals.length + 1
+
+      draggable.drag = true
+    },
+    finishSelection: function() {
+      draggable.drag = false
+    },
+
+    changeSelection: function(evt) {
+      this.selectedGoal = evt.draggedContext.futureIndex
+    },
     keyboardShortcuts(event) {
       // 1 - Om ett målnamn håller på att redigeras
 
