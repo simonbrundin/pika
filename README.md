@@ -14,6 +14,7 @@ https://getslash.co/
 - Drag & Drop Reorder - Ändra ordningen på målen genom att bara dra dem
 - WASD Reorder - Ändra ordningen på målen genom att klicka på WASD-tangenterna
 - Fokusruta - Your current task stays pinned on screen so you know where to focus, at all times.
+- Ikoner - Ikon för målet som sätts efter vilken text det har. Tex Telefon om det står 'Ring ...'
 
 ## ToDo
 
