@@ -21,8 +21,16 @@
           }"
           @click="checkGoal(goal, index)"
           v-if="!goal.editing"
-        >{{ goal.title }}</li>
-        <input v-focus v-if="goal.editing" class="goal-line-edit" type="text" v-model="goal.title" />
+        >
+          {{ goal.title }}
+        </li>
+        <input
+          v-focus
+          v-if="goal.editing"
+          class="goal-line-edit"
+          type="text"
+          v-model="goal.title"
+        />
       </ul>
     </draggable>
   </div>
@@ -36,7 +44,7 @@ export default {
     draggable
   },
 
-  data() {
+  data () {
     return {
       editingGoal: false,
       inputInFocus: false,
@@ -71,29 +79,29 @@ export default {
   directives: {
     focus: {
       // directive definition
-      inserted: function(el) {
+      inserted: function (el) {
         el.focus()
       }
     }
   },
-  mounted() {
+  mounted () {
     document.addEventListener('keydown', this.keyboardShortcuts)
   },
 
   methods: {
-    zeroSelection: function() {
+    zeroSelection: function () {
       this.selectedGoal = this.goals.length + 1
 
       draggable.drag = true
     },
-    finishSelection: function() {
+    finishSelection: function () {
       draggable.drag = false
     },
 
-    changeSelection: function(evt) {
+    changeSelection: function (evt) {
       this.selectedGoal = evt.draggedContext.futureIndex
     },
-    keyboardShortcuts(event) {
+    keyboardShortcuts (event) {
       // 1 - Om ett målnamn håller på att redigeras
 
       if (this.editingGoal) {
@@ -197,7 +205,7 @@ export default {
         }
       }
     },
-    addGoal() {
+    addGoal () {
       if (this.goalInputText !== '') {
         let newID = this.goals.length + 1
 
@@ -215,18 +223,18 @@ export default {
         this.showInputBox = false
       }
     },
-    selectGoal(goal) {
+    selectGoal (goal) {
       this.selectedGoal = goal.id
     },
-    checkGoal(goal, index) {
+    checkGoal (goal, index) {
       this.selectedGoal = index
     },
-    editGoal(goal) {
+    editGoal (goal) {
       console.log('test')
 
       goal.editing = true
     },
-    doneEditingGoal(goal) {
+    doneEditingGoal (goal) {
       goal.editing = false
     }
   }
@@ -269,7 +277,6 @@ export default {
 
 .selected-goal {
   font-weight: 900;
-  background: ;
 }
 
 h1 {
