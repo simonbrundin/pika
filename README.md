@@ -22,3 +22,8 @@ https://getslash.co/
 - Lära mig skapa en todo-app med subtasks
 - Fundera ut vad jag vill se överst. Gör nu eller nästa aktivitet
 - Se till att vanor prioriteras högst - Se till så jag alltid slutför dagens vanor - ma
+
+
+## Idéer
+
+- Om man tryckt bort ett mål ett visst antal gånger, hjälp en då att förstå varför man åtsidosätter målet
