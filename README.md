@@ -27,3 +27,4 @@ https://getslash.co/
 ## Idéer
 
 - Om man tryckt bort ett mål ett visst antal gånger, hjälp en då att förstå varför man åtsidosätter målet
+https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.svd.se%2F5-forbluffande-fakta-om-din-biologiska-klocka&psig=AOvVaw1XOhmeAbpxp3iZLNpcUlyU&ust=1618233470268000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCLC57cqj9u8CFQAAAAAdAAAAABAD
